@@ -16,7 +16,7 @@ class Movie < ActiveRecord::Base
 
   def self.ratings_to_show(ratings)
     if ratings.nil? == true
-      return nil
+      return all_ratings
     else
       return ratings.keys
     end
