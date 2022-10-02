@@ -15,6 +15,19 @@ class MoviesController < ApplicationController
     end
     @all_ratings = Movie.all_ratings
     @movies = Movie.with_ratings(@ratings_to_show)
+    
+    if params[:column].nil? == false
+      if params[:column] == 'title'
+        @movies = Movie.sort_titles(@movies)
+        @color_title = 'hilite bg-warning'
+        @color_date = ''
+      elsif params[:column] == 'date'
+        @movies = Movie.sort_dates(@movies)
+        @color_date = 'hilite bg-warning'
+        @color_title = ''
+      end 
+    end
+
   end
 
   def new
@@ -49,6 +62,6 @@ class MoviesController < ApplicationController
   # Making "internal" methods private is not required, but is a common practice.
   # This helps make clear which methods respond to requests, and which ones do not.
   def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date, :column)
   end
 end

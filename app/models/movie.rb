@@ -22,7 +22,11 @@ class Movie < ActiveRecord::Base
     end
   end
 
-  def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
+  def self.sort_titles(movies)
+    movies.order(title: :asc)
+  end
+
+  def self.sort_dates(movies)
+    movies.order(release_date: :asc)
   end
 end
