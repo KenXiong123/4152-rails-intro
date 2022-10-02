@@ -17,10 +17,12 @@ class MoviesController < ApplicationController
         @movies = Movie.sort_titles(@movies)
         @color_title = 'hilite bg-warning'
         @color_date = ''
+        redirect_to movies_path(:column => 'title', :ratings_to_show => Hash[@ratings_to_show.map {|key| [key,1]}])
       elsif params[:column] == 'date'
         @movies = Movie.sort_dates(@movies)
         @color_date = 'hilite bg-warning'
         @color_title = ''
+        redirect_to movies_path(:column => 'date', :ratings_to_show => Hash[@ratings_to_show.map {|key| [key,1]}])
       end 
     end
   end
