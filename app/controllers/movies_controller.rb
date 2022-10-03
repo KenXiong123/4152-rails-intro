@@ -14,21 +14,6 @@ class MoviesController < ApplicationController
     else
       session[:ratings] = params[:ratings]
       @ratings_to_show = params[:ratings].keys
-   
-
-      if !params[:column] && !params[:ratings]
-        if session[:ratings] && session[:column]
-          @ratings_to_show = session[:ratings].keys
-          redirect_to_movies_path(:column => session[:column], :ratings => session[:ratings]) and return
-        elsif session[:ratings]
-          @ratings_to_show = session[:ratings].keys
-          redirect_to_movies_path(:ratings => session[:ratings]) and return
-        elsif session[:column]
-          redirect_to_movies_path(:column => session[:column]) and return
-        else
-          @movies = Movie.all
-        end
-      end
     end
     @movies = Movie.with_ratings(@ratings_to_show)
     
@@ -43,6 +28,18 @@ class MoviesController < ApplicationController
         @color_date = 'hilite bg-warning'
         @color_title = ''
       end 
+    end
+
+    if !params[:column] && !params[:ratings]
+      if session[:ratings] && session[:column]
+        @ratings_to_show = session[:ratings].keys
+        redirect_to movies_path(:column => session[:column], :ratings => session[:ratings]) and return
+      elsif session[:ratings]
+        @ratings_to_show = session[:ratings].keys
+        redirect_to movies_path(:ratings => session[:ratings]) and return
+      elsif session[:column]
+        redirect_to movies_path(:column => session[:column]) and return
+      end
     end
 
     # if params[:ratings].nil? == true and params[:column].nil? == true
