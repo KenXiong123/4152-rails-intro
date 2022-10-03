@@ -12,9 +12,11 @@ class MoviesController < ApplicationController
         session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])        
         redirect_to movies_path(column: params[:column], ratings: params[:ratings])
       end
+    else
+      session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])  
     end
 
-    session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])        
+          
     @ratings_to_show = session[:ratings_to_show]
     @all_ratings = Movie.all_ratings
     @movies = Movie.with_ratings(@ratings_to_show)
