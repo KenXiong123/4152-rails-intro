@@ -12,11 +12,13 @@ class MoviesController < ApplicationController
     if params[:ratings].nil? == true
       @ratings_to_show = @all_ratings
     else
+      session[:ratings] = params[:ratings]
       @ratings_to_show = params[:ratings].keys
     end
     @movies = Movie.with_ratings(@ratings_to_show)
     
     if params[:column].nil? == false
+      session[:column] = params[:column]
       if params[:column] == 'title'
         @movies = Movie.sort_titles(@movies)
         @color_title = 'hilite bg-warning'
