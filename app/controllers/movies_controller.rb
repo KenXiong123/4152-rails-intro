@@ -26,6 +26,11 @@ class MoviesController < ApplicationController
         params[:column] = 'data'
       end 
     end
+
+    if performed?
+      redirect_to movies_path(column: params[:column], ratings: params[:ratings])
+    end
+    
   end
 
   def new
