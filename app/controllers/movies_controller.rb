@@ -12,13 +12,11 @@ class MoviesController < ApplicationController
     if params[:ratings].nil? == true
       @ratings_to_show = @all_ratings
     else
-      session[:ratings] = params[:ratings]
       @ratings_to_show = params[:ratings].keys
     end
     @movies = Movie.with_ratings(@ratings_to_show)
     
     if params[:column].nil? == false
-      session[:column] = params[:column]
       if params[:column] == 'title'
         @movies = Movie.sort_titles(@movies)
         @color_title = 'hilite bg-warning'
@@ -41,21 +39,6 @@ class MoviesController < ApplicationController
         redirect_to movies_path(:column => session[:column]) and return
       end
     end
-
-    # if params[:ratings].nil? == true and params[:column].nil? == true
-    #   render "index"       
-    # else
-    #   if session[:ratings].nil? == false and session[:column].nil? == false  
-    #     redirect_to movies_path(:column => session[:column], :ratings => session[:ratings])
-
-    #   elsif session[:column].nil? == false
-    #     redirect_to movies_path(:column => session[:column])
-
-    #   elsif session[:ratings].nil? == false
-    #     redirect_to movies_path(:ratings => session[:ratings])
-
-    #   end
-    # end
   end
 
   def new
