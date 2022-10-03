@@ -9,11 +9,12 @@ class MoviesController < ApplicationController
   def index
     if params[:ratings].nil? == false and session[:ratings_to_show].nil? == false
       if session[:ratings_to_show] != params[:ratings].keys
-        session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])
+        session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])        
         redirect_to movies_path(column: params[:column], ratings: params[:ratings])
       end
     end
 
+    session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])        
     @ratings_to_show = session[:ratings_to_show]
     @all_ratings = Movie.all_ratings
     @movies = Movie.with_ratings(@ratings_to_show)
