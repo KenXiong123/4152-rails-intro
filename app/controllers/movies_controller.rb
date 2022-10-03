@@ -7,9 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])
+    if params[:ratings].nil? == false and session[:ratings_to_show].nil? == false
+      if session[:ratings_to_show] != params[:ratings].keys
+        session[:ratings_to_show] = Movie.ratings_to_show(params[:ratings])
+        redirect_to movies_path(column: params[:column], ratings: params[:ratings])
+      end
+    end
+
     @ratings_to_show = session[:ratings_to_show]
-    params[:ratings] = Hash[@ratings_to_show.map {|key| [key,1]}]
     @all_ratings = Movie.all_ratings
     @movies = Movie.with_ratings(@ratings_to_show)
     
@@ -18,19 +23,12 @@ class MoviesController < ApplicationController
         @movies = Movie.sort_titles(@movies)
         @color_title = 'hilite bg-warning'
         @color_date = ''
-        params[:column] = 'title'
       elsif params[:column] == 'date'
         @movies = Movie.sort_dates(@movies)
         @color_date = 'hilite bg-warning'
         @color_title = ''
-        params[:column] = 'data'
       end 
     end
-
-    if performed?
-      redirect_to movies_path(column: params[:column], ratings: params[:ratings])
-    end
-    
   end
 
   def new
