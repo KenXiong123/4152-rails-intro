@@ -7,13 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if params[:ratings].nil? == false and session[:ratings].nil? == false
-      if session[:ratings] != params[:ratings].keys
-        session[:ratings] = Movie.ratings_to_show(params[:ratings])        
-        redirect_to movies_path(column: params[:column], ratings: params[:ratings])
+    if params[:ratings].nil? == false and params[:column].nil? == false
+      if session[:ratings].nil? == false and session[:column].nil? == false   
+        redirect_to movies_path(:column => session[:column], :ratings => session[:ratings])
+      
+      elsif session[:column].nil? == false
+        redirect_to movies_path(:column => session[:column])
+
+      elsif session[:ratings].nil? == false
+        redirect_to movies_path(:ratings => session[:ratings])
+    
+      else
+        @movies = Movie.all
       end
-    else
-      session[:ratings] = Movie.ratings_to_show(params[:ratings])  
     end
 
           
