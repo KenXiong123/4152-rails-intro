@@ -8,11 +8,27 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
+    
     if params[:ratings].nil? == true
       @ratings_to_show = @all_ratings
     else
       session[:ratings] = params[:ratings]
       @ratings_to_show = params[:ratings].keys
+   
+
+      if !params[:column] && !params[:ratings]
+        if session[:ratings] && session[:column]
+          @ratings_to_show = session[:ratings].keys
+          redirect_to_movies_path(:column => session[:column], :ratings => session[:ratings]) and return
+        elsif session[:ratings]
+          @ratings_to_show = session[:ratings].keys
+          redirect_to_movies_path(:ratings => session[:ratings]) and return
+        elsif session[:column]
+          redirect_to_movies_path(:column => session[:column]) and return
+        else
+          @movies = Movie.all
+        end
+      end
     end
     @movies = Movie.with_ratings(@ratings_to_show)
     
@@ -29,20 +45,20 @@ class MoviesController < ApplicationController
       end 
     end
 
-    if params[:ratings].nil? == true and params[:column].nil? == true
-      render "index"       
+    # if params[:ratings].nil? == true and params[:column].nil? == true
+    #   render "index"       
     # else
     #   if session[:ratings].nil? == false and session[:column].nil? == false  
-    #     render movies_path(:column => session[:column], :ratings => session[:ratings])
+    #     redirect_to movies_path(:column => session[:column], :ratings => session[:ratings])
 
     #   elsif session[:column].nil? == false
-    #     render movies_path(:column => session[:column])
+    #     redirect_to movies_path(:column => session[:column])
 
     #   elsif session[:ratings].nil? == false
-    #     render movies_path(:ratings => session[:ratings])
+    #     redirect_to movies_path(:ratings => session[:ratings])
 
     #   end
-    end
+    # end
   end
 
   def new
